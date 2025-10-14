@@ -1,0 +1,6 @@
+src-git packages https://git.openwrt.org/feed/packages.git^89cbbf6f26ad35bdb32e541711728ae22dfb4aca
+src-git luci https://git.openwrt.org/project/luci.git^f3bacd45ade4dcdbba41836e5eeb7fdda21b45bc
+src-git routing https://git.openwrt.org/feed/routing.git^45221cf5fa385faa035f5bc0f9cd98f6a51c4fd9
+src-git telephony https://git.openwrt.org/feed/telephony.git^44d6355a7b2d69dd25d73913811b421fc504b836
+src-git video https://github.com/openwrt/video.git^1668ab74cf47cdec753895e70007083ba9c69fe4
+src-link mtk_openwrt_feed /home/ipsec/bpi-r4-6.12/mtk-openwrt-feeds

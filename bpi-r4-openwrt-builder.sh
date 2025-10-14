@@ -48,7 +48,9 @@ bash ../mtk-openwrt-feeds/autobuild/unified/autobuild.sh filogic-mac80211-mt7988
 
 exit 0
 
-bash ../mtk-openwrt-feeds/autobuild/unified/autobuild.sh filogic-mac80211-mt7988_rfb-mt7996 fullclean log_file=fullclean
-
 cd openwrt
-bash ../mtk-openwrt-feeds/autobuild/unified/autobuild.sh filogic-mac80211-mt7988_rfb-mt7996 prepare log_file=new_prepare
+\cp -r ../configs/6.12.config .config
+make menuconfig
+make -i -j1 V=sc | tee finalmake.txt
+
+
