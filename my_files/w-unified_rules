@@ -394,7 +394,7 @@ build_openwrt() {
 		log_warn "Build failed with error code ${ret}."
 		log_warn "Restart single-threaded building for debugging purpose."
 
-		exec_log "make -C \"${openwrt_root}\"-i V=s -j1"
+		exec_log "make -C \"${openwrt_root}\" -i V=s -j1"
 
 		ret=$?
 
