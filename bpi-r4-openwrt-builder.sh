@@ -9,7 +9,7 @@ cd openwrt; git checkout e112fd8e59e37ae323fdaebb74bdd6084176d8e4; cd -;		#mt76:
 git clone https://git01.mediatek.com/openwrt/feeds/mtk-openwrt-feeds || true
 cd mtk-openwrt-feeds; git checkout 718ab32d40c2e82fadc882c035e665a79a14c082; cd -;	#[openwrt-master][MAC80211][wed][Fix wed patch fail]
 
-echo "c095e1" > mtk-openwrt-feeds/autobuild/unified/feed_revision
+echo "718ab3" > mtk-openwrt-feeds/autobuild/unified/feed_revision
 
 #\cp -r my_files/w-rules mtk-openwrt-feeds/autobuild/unified/filogic/rules
 \cp -r my_files/w-unified_rules mtk-openwrt-feeds/autobuild/unified/rules
@@ -27,6 +27,8 @@ bash ../mtk-openwrt-feeds/autobuild/unified/autobuild.sh filogic-mac80211-mt7988
 bash ../mtk-openwrt-feeds/autobuild/unified/autobuild.sh filogic-mac80211-mt7988_rfb-mt7996 release log_file=release
 
 exit 0
+
+\cp -r configs/config.mm.dbg openwrt/.config
 
 ============================ extension for Telit FN990 family
 

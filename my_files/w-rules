@@ -110,5 +110,5 @@ copy_phy_firmware() {
 }
 
 remove_crypto_package () {
-	exec_log "${openwrt_root}/scripts/feeds uninstall crypto-eip pce tops-tool"
+	exec_log "${openwrt_root}/scripts/feeds uninstall tops-tool"
 }
