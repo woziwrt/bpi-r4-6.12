@@ -4,14 +4,16 @@ rm -rf openwrt
 rm -rf mtk-openwrt-feeds
 
 git clone --branch master https://github.com/openwrt/openwrt.git openwrt || true
-cd openwrt; git checkout df950f4cfddd6696fe72f51d4260152f08bd643f; cd -;		#prereq: use staging_dir's compiler
+cd openwrt; git checkout 099633be82ee8a75a2f271b90f3a07e6e2c01ffc; cd -;		#kernel: bump 6.6 to 6.6.116
 
 git clone https://git01.mediatek.com/openwrt/feeds/mtk-openwrt-feeds || true
-cd mtk-openwrt-feeds; git checkout 3cb1207fb1473880fe6ab9ea85dd50e8781c14ce; cd -;	#[kernel-6.12][common][Enable spidev config]
+cd mtk-openwrt-feeds; git checkout 1952d51abe1acc6ba61624921c476e330f3f18e5; cd -;	#[openwrt-master][common][upgrade OpenWrt master SDK version]
 
-#\cp -r my_files/feed_revision mtk-openwrt-feeds/autobuild/unified/
+\cp -r my_files/feed_revision mtk-openwrt-feeds/autobuild/unified/
 
-#\cp -r my_files/w-rules mtk-openwrt-feeds/autobuild/unified/filogic/rules
+\cp -r my_files/w-cmake.mk openwrt/include/cmake.mk 
+
+\cp -r my_files/w-rules mtk-openwrt-feeds/autobuild/unified/filogic/rules
 #\cp -r my_files/w-unified_rules mtk-openwrt-feeds/autobuild/unified/rules
 
 cd openwrt
@@ -19,12 +21,11 @@ bash ../mtk-openwrt-feeds/autobuild/unified/autobuild.sh filogic log_file=make
 
 exit 0
 
-\cp -r configs/config.mm.dbg openwrt/.config		#Modemmanager+other extension
+\cp -r configs/config.crypto.ext openwrt/.config		
 make -j $(nproc) V=s
 
 ============================ extension for Telit FN990 family
 
-cd openwrt
 \cp -r ../my_files/sms-tool/ feeds/packages/utils/sms-tool
 \cp -r ../my_files/modemdata-main/ feeds/packages/utils/modemdata 
 \cp -r ../my_files/luci-app-modemdata-main/luci-app-modemdata/ feeds/luci/applications
@@ -40,9 +41,9 @@ chmod -R 755 feeds/luci/applications/luci-app-modemdata/root
 chmod -R 755 feeds/luci/applications/luci-app-sms-tool-js/root
 chmod -R 755 feeds/packages/utils/modemdata/files/usr/share
 
-\cp -r ../configs/config.telit.ext .config
+\cp -r ../configs/config.telit .config
 
-scripts/feeds uninstall crypto-eip pce tops-tool
+#scripts/feeds uninstall crypto-eip pce tops-tool
 
 make menuconfig
 make -j $(nproc) V=s
