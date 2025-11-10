@@ -7,7 +7,7 @@ git clone --branch master https://github.com/openwrt/openwrt.git openwrt || true
 cd openwrt; git checkout 099633be82ee8a75a2f271b90f3a07e6e2c01ffc; cd -;		#kernel: bump 6.6 to 6.6.116
 
 git clone https://git01.mediatek.com/openwrt/feeds/mtk-openwrt-feeds || true
-cd mtk-openwrt-feeds; git checkout 0f6a7d02e860dfff532fc0361c51988af45a2b3a; cd -;	#[kernel-6.12][common][eth][Refactor basic NETSYS patches]
+cd mtk-openwrt-feeds; git checkout 35d8f815835b4183fb412b47c055eff8cd7cec5e; cd -;	#[kernel-6.12][common][eth][Add NETSYS SER fast mode]
 
 \cp -r my_files/feed_revision mtk-openwrt-feeds/autobuild/unified/
 
