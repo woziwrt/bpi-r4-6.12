@@ -7,12 +7,12 @@ git clone --branch master https://github.com/openwrt/openwrt.git openwrt || true
 cd openwrt; git checkout 099633be82ee8a75a2f271b90f3a07e6e2c01ffc; cd -;		#kernel: bump 6.6 to 6.6.116
 
 git clone https://git01.mediatek.com/openwrt/feeds/mtk-openwrt-feeds || true
-cd mtk-openwrt-feeds; git checkout 1952d51abe1acc6ba61624921c476e330f3f18e5; cd -;	#[openwrt-master][common][upgrade OpenWrt master SDK version]
+cd mtk-openwrt-feeds; git checkout 0f6a7d02e860dfff532fc0361c51988af45a2b3a; cd -;	#[kernel-6.12][common][eth][Refactor basic NETSYS patches]
 
 \cp -r my_files/feed_revision mtk-openwrt-feeds/autobuild/unified/
 
 \cp -r my_files/w-cmake.mk openwrt/include/cmake.mk 
-
+\cp -r my_files/w-defconfig mtk-openwrt-feeds/autobuild/unified/filogic/master/defconfig
 \cp -r my_files/w-rules mtk-openwrt-feeds/autobuild/unified/filogic/rules
 #\cp -r my_files/w-unified_rules mtk-openwrt-feeds/autobuild/unified/rules
 
@@ -26,6 +26,7 @@ make -j $(nproc) V=s
 
 ============================ extension for Telit FN990 family
 
+cd openwrt
 \cp -r ../my_files/sms-tool/ feeds/packages/utils/sms-tool
 \cp -r ../my_files/modemdata-main/ feeds/packages/utils/modemdata 
 \cp -r ../my_files/luci-app-modemdata-main/luci-app-modemdata/ feeds/luci/applications
