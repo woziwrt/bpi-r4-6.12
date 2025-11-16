@@ -7,22 +7,17 @@ git clone --branch master https://github.com/openwrt/openwrt.git openwrt || true
 cd openwrt; git checkout 099633be82ee8a75a2f271b90f3a07e6e2c01ffc; cd -;		#kernel: bump 6.6 to 6.6.116
 
 git clone https://git01.mediatek.com/openwrt/feeds/mtk-openwrt-feeds || true
-cd mtk-openwrt-feeds; git checkout 35d8f815835b4183fb412b47c055eff8cd7cec5e; cd -;	#[kernel-6.12][common][eth][Add NETSYS SER fast mode]
+cd mtk-openwrt-feeds; git checkout dde978f6228f2e3761377559b0762d1421ae6c29; cd -;	#[kernel-6.6][common][i2c][fix zts8232 driver callbacks]
 
-\cp -r my_files/feed_revision mtk-openwrt-feeds/autobuild/unified/
+#\cp -r my_files/feed_revision mtk-openwrt-feeds/autobuild/unified/
 
-\cp -r my_files/w-cmake.mk openwrt/include/cmake.mk 
 \cp -r my_files/w-defconfig mtk-openwrt-feeds/autobuild/unified/filogic/master/defconfig
 \cp -r my_files/w-rules mtk-openwrt-feeds/autobuild/unified/filogic/rules
-#\cp -r my_files/w-unified_rules mtk-openwrt-feeds/autobuild/unified/rules
 
 cd openwrt
 bash ../mtk-openwrt-feeds/autobuild/unified/autobuild.sh filogic log_file=make
 
 exit 0
-
-\cp -r configs/config.crypto.ext openwrt/.config		
-make -j $(nproc) V=s
 
 ============================ extension for Telit FN990 family
 
