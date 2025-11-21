@@ -4,12 +4,15 @@ rm -rf openwrt
 rm -rf mtk-openwrt-feeds
 
 git clone --branch master https://github.com/openwrt/openwrt.git openwrt || true
-cd openwrt; git checkout 099633be82ee8a75a2f271b90f3a07e6e2c01ffc; cd -;		#kernel: bump 6.6 to 6.6.116
+cd openwrt; git checkout b29cf08a1eb6af799b2bdaf5cf655532b238d2eb; cd -;		#openssl: add MODULES_DIR MACRO for provider
 
 git clone https://git01.mediatek.com/openwrt/feeds/mtk-openwrt-feeds || true
-cd mtk-openwrt-feeds; git checkout dde978f6228f2e3761377559b0762d1421ae6c29; cd -;	#[kernel-6.6][common][i2c][fix zts8232 driver callbacks]
+cd mtk-openwrt-feeds; git checkout b65226d58ec5dc743de69c481745ef03188c4885; cd -;	#[openwrt-master][common][u-boot][Add mt7981 and mt7986 U-boot support]
 
 #\cp -r my_files/feed_revision mtk-openwrt-feeds/autobuild/unified/
+\cp -r my_files/w-1132-image-mediatek-filogic-add-bananapi-bpi-r4-lite-support.patch mtk-openwrt-feeds/master/patches-base/1132-image-mediatek-filogic-add-bananapi-bpi-r4-lite-support.patch
+#\cp -r my_files/w-1133-image-mediatek-filogic-add-bananapi-bpi-r4-pro-support-sdcard.patch mtk-openwrt-feeds/master/patches-base/1133-image-mediatek-filogic-add-bananapi-bpi-r4-pro-support-sdcard.patch
+\cp -r my_files/w-3410-boot-uboot-mediatek-bpi-r4-pro.patch mtk-openwrt-feeds/master/patches-base/3410-boot-uboot-mediatek-bpi-r4-pro.patch
 
 \cp -r my_files/w-defconfig mtk-openwrt-feeds/autobuild/unified/filogic/master/defconfig
 \cp -r my_files/w-rules mtk-openwrt-feeds/autobuild/unified/filogic/rules
@@ -18,6 +21,11 @@ cd openwrt
 bash ../mtk-openwrt-feeds/autobuild/unified/autobuild.sh filogic log_file=make
 
 exit 0
+
+\cp -r configs/config.mm openwrt/.config
+make menuconfig
+make -j $(nproc) V=s
+
 
 ============================ extension for Telit FN990 family
 
