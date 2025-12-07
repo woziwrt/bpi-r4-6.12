@@ -11,7 +11,6 @@ cd mtk-openwrt-feeds; git checkout eb48282ba6a7ddc100e7a17e3c7eedbd1d782a10; cd 
 
 \cp -r my_files/w-defconfig mtk-openwrt-feeds/autobuild/unified/filogic/master/defconfig
 \cp -r my_files/w-rules mtk-openwrt-feeds/autobuild/unified/filogic/rules
-#\cp -r my_files/w-unified_rules mtk-openwrt-feeds/autobuild/unified/rules
 
 \cp -r my_files/999-wozi-add-rtl8261be-support.patch openwrt/target/linux/mediatek/patches-6.12/
 
@@ -21,17 +20,17 @@ mkdir -p openwrt/package/kernel/mt76/patches && cp -r my_files/99999_tx_power_ch
 cd openwrt
 bash ../mtk-openwrt-feeds/autobuild/unified/autobuild.sh filogic log_file=make
 
-exit 0
+#exit 0
 
 \cp -r configs/config.mm.relatek openwrt/.config
-
-make menuconfig
-make -j24 V=sc
-
-
-============================ extension for Telit FN990 family
-
 cd openwrt
+#make menuconfig
+make -j$(nproc) V=sc
+
+
+#============================ extension for Telit FN990 family
+
+#cd openwrt
 \cp -r ../my_files/sms-tool/ feeds/packages/utils/sms-tool
 \cp -r ../my_files/modemdata-main/ feeds/packages/utils/modemdata 
 \cp -r ../my_files/luci-app-modemdata-main/luci-app-modemdata/ feeds/luci/applications
