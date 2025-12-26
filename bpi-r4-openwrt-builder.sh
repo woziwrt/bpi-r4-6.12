@@ -3,13 +3,13 @@
 rm -rf openwrt
 rm -rf mtk-openwrt-feeds
 
-git clone --branch master https://github.com/openwrt/openwrt.git openwrt || true
-cd openwrt; git checkout 8ad5f35a9013ca7c65e86e7aef92617903afeab0; cd -;		#autoconf-archive: backport patch for C++23 support
+git clone --branch openwrt-25.12 https://github.com/openwrt/openwrt.git openwrt || true
+cd openwrt; git checkout 02f9e71dd2261d178f74ac93bff9d6eba216096c; cd -;		#OpenWrt v25.12.0-rc1: revert to branch defaults
 
 git clone --branch master https://git01.mediatek.com/openwrt/feeds/mtk-openwrt-feeds || true
-cd mtk-openwrt-feeds; git checkout eb48282ba6a7ddc100e7a17e3c7eedbd1d782a10; cd -;	#[openwrt-master][common][optee][Refactor OP-TEE early ta]
+cd mtk-openwrt-feeds; git checkout f221bd58827d0d56cf1c0c29a79cf338486f910b; cd -;	#[openwrt-25.12][common][bootloader][Rebase and update ATF&U-boot to MTK Q4 release]
 
-\cp -r my_files/w-defconfig mtk-openwrt-feeds/autobuild/unified/filogic/master/defconfig
+#\cp -r my_files/w-defconfig mtk-openwrt-feeds/autobuild/unified/filogic/master/defconfig
 \cp -r my_files/w-rules mtk-openwrt-feeds/autobuild/unified/filogic/rules
 
 \cp -r my_files/999-wozi-add-rtl8261be-support.patch openwrt/target/linux/mediatek/patches-6.12/
@@ -20,12 +20,12 @@ mkdir -p openwrt/package/kernel/mt76/patches && cp -r my_files/99999_tx_power_ch
 cd openwrt
 bash ../mtk-openwrt-feeds/autobuild/unified/autobuild.sh filogic log_file=make
 
-#exit 0
-
-\cp -r configs/config.mm.relatek openwrt/.config
+\cp -r configs/config.rc3.mm openwrt/.config
 cd openwrt
-#make menuconfig
-make -j$(nproc) V=sc
+make menuconfig
+make -j$(nproc) V=s
+
+exit 0
 
 
 #============================ extension for Telit FN990 family
