@@ -4,12 +4,12 @@ rm -rf openwrt
 rm -rf mtk-openwrt-feeds
 
 git clone --branch openwrt-25.12 https://github.com/openwrt/openwrt.git openwrt || true
-cd openwrt; git checkout 2acfd9f8ab12e4f353a0aa644d9adf89588b1f0f; cd -;		#wifi-scripts: ucode: fix wpa_supplicant mesh
+cd openwrt; git checkout 7082aa3b4979c7f7df3aa8da7bc40a4c260eb196; cd -;		#OpenWrt v25.12.0-rc2: revert to branch defaults
 
 git clone --branch master https://git01.mediatek.com/openwrt/feeds/mtk-openwrt-feeds || true
-cd mtk-openwrt-feeds; git checkout 55c08a59c25502936f82278247244bc6c9f3cedf; cd -;	#[kernel-6.6/6.12/master][common][eth][Change Ethernet PHY extra firmware directory]
+cd mtk-openwrt-feeds; git checkout c28d401845042036048f023c2b936c5f036ad791; cd -;	#[kernel-6.12][common][net][bypass seq check of pptp data packet]
 
-\cp -r my_files/feed_revision mtk-openwrt-feeds/autobuild/unified/
+#\cp -r my_files/feed_revision mtk-openwrt-feeds/autobuild/unified/
 
 #\cp -r my_files/w-defconfig mtk-openwrt-feeds/autobuild/unified/filogic/master/defconfig
 \cp -r my_files/w-rules mtk-openwrt-feeds/autobuild/unified/filogic/rules
@@ -17,7 +17,7 @@ cd mtk-openwrt-feeds; git checkout 55c08a59c25502936f82278247244bc6c9f3cedf; cd 
 #\cp -r my_files/999-wozi-add-rtl8261be-support.patch openwrt/target/linux/mediatek/patches-6.12/
 
 ### tx_power patch - required for BE14 boards with defective eeprom flash
-mkdir -p openwrt/package/kernel/mt76/patches && cp -r my_files/99999_tx_power_check.patch $_
+#mkdir -p openwrt/package/kernel/mt76/patches && cp -r my_files/99999_tx_power_check.patch $_
 
 cd openwrt
 bash ../mtk-openwrt-feeds/autobuild/unified/autobuild.sh filogic-mac80211-mt798x_rfb-wifi7_nic log_file=make
@@ -26,7 +26,8 @@ exit 0
 
 cd openwrt
 \cp -r ../my_files/w-filogic.mk target/linux/mediatek/image/filogic.mk
-\cp -r ../configs/config.25.12.mlo.crypto.mm openwrt/.config
+#\cp -r ../configs/mtk_test.nocrypto.config openwrt/.config
+\cp -r ../configs/mtk_test.crypto.config openwrt/.config
 make menuconfig
 make -j$(nproc) V=s
 
