@@ -27,7 +27,7 @@ exit 0
 cd openwrt
 \cp -r ../my_files/w-filogic.mk target/linux/mediatek/image/filogic.mk
 #\cp -r ../configs/mtk_test.nocrypto.config openwrt/.config
-\cp -r ../configs/mtk_test.crypto.config openwrt/.config
+\cp -r ../configs/config.wifi.tests openwrt/.config
 make menuconfig
 make -j$(nproc) V=s
 
@@ -52,7 +52,7 @@ chmod -R 755 feeds/luci/applications/luci-app-modemdata/root
 chmod -R 755 feeds/luci/applications/luci-app-sms-tool-js/root
 chmod -R 755 feeds/packages/utils/modemdata/files/usr/share
 
-\cp -r ../configs/config.telit .config
+#\cp -r ../configs/config.telit .config
 
 #scripts/feeds uninstall crypto-eip pce tops-tool
 
