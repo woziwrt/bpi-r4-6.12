@@ -4,10 +4,10 @@ rm -rf openwrt
 rm -rf mtk-openwrt-feeds
 
 git clone --branch openwrt-25.12 https://github.com/openwrt/openwrt.git openwrt || true
-cd openwrt; git checkout 7082aa3b4979c7f7df3aa8da7bc40a4c260eb196; cd -;		#OpenWrt v25.12.0-rc2: revert to branch defaults
+cd openwrt; git checkout 4542656411cb3b8ced8036a8263c430e31d16685; cd -;		#kernel: modules: add kmod-pmbus-sensors package
 
 git clone --branch master https://git01.mediatek.com/openwrt/feeds/mtk-openwrt-feeds || true
-cd mtk-openwrt-feeds; git checkout c28d401845042036048f023c2b936c5f036ad791; cd -;	#[kernel-6.12][common][net][bypass seq check of pptp data packet]
+cd mtk-openwrt-feeds; git checkout d96a47edab841a98997274c5f1be364d8c4543fd; cd -;	#[openwrt-24/openwrt-25.12][MAC80211][WiFi7][modify the sns script]
 
 #\cp -r my_files/feed_revision mtk-openwrt-feeds/autobuild/unified/
 
@@ -17,7 +17,7 @@ cd mtk-openwrt-feeds; git checkout c28d401845042036048f023c2b936c5f036ad791; cd 
 #\cp -r my_files/999-wozi-add-rtl8261be-support.patch openwrt/target/linux/mediatek/patches-6.12/
 
 ### tx_power patch - required for BE14 boards with defective eeprom flash
-#mkdir -p openwrt/package/kernel/mt76/patches && cp -r my_files/99999_tx_power_check.patch $_
+mkdir -p openwrt/package/kernel/mt76/patches && cp -r my_files/99999_tx_power_check.patch $_
 
 cd openwrt
 bash ../mtk-openwrt-feeds/autobuild/unified/autobuild.sh filogic-mac80211-mt798x_rfb-wifi7_nic log_file=make
@@ -27,7 +27,7 @@ exit 0
 cd openwrt
 \cp -r ../my_files/w-filogic.mk target/linux/mediatek/image/filogic.mk
 #\cp -r ../configs/mtk_test.nocrypto.config openwrt/.config
-\cp -r ../configs/config.wifi.tests openwrt/.config
+\cp -r ../configs/mtk_test.crypto.config openwrt/.config
 make menuconfig
 make -j$(nproc) V=s
 
@@ -52,7 +52,7 @@ chmod -R 755 feeds/luci/applications/luci-app-modemdata/root
 chmod -R 755 feeds/luci/applications/luci-app-sms-tool-js/root
 chmod -R 755 feeds/packages/utils/modemdata/files/usr/share
 
-#\cp -r ../configs/config.telit .config
+\cp -r ../configs/config.telit .config
 
 #scripts/feeds uninstall crypto-eip pce tops-tool
 
