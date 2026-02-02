@@ -4,17 +4,19 @@ rm -rf openwrt
 rm -rf mtk-openwrt-feeds
 
 git clone --branch openwrt-25.12 https://github.com/openwrt/openwrt.git openwrt || true
-cd openwrt; git checkout 4542656411cb3b8ced8036a8263c430e31d16685; cd -;		#kernel: modules: add kmod-pmbus-sensors package
+cd openwrt; git checkout beb134292d66d5437b8b99f8fca60976aaf817a0; cd -;		#kernel: fix rtl8261n driver for non-realtek chips
 
 git clone --branch master https://git01.mediatek.com/openwrt/feeds/mtk-openwrt-feeds || true
-cd mtk-openwrt-feeds; git checkout d96a47edab841a98997274c5f1be364d8c4543fd; cd -;	#[openwrt-24/openwrt-25.12][MAC80211][WiFi7][modify the sns script]
+cd mtk-openwrt-feeds; git checkout fd0741fc9d8c18b540a5a3192e059cd546011ee2; cd -;	#[kernel-6.12][mt7988][crypto][Add txd info for IPSec inline mode in gro frag_list processing]
 
 #\cp -r my_files/feed_revision mtk-openwrt-feeds/autobuild/unified/
 
 #\cp -r my_files/w-defconfig mtk-openwrt-feeds/autobuild/unified/filogic/master/defconfig
 \cp -r my_files/w-rules mtk-openwrt-feeds/autobuild/unified/filogic/rules
 
-#\cp -r my_files/999-wozi-add-rtl8261be-support.patch openwrt/target/linux/mediatek/patches-6.12/
+\cp -r my_files/w-defconfig mtk-openwrt-feeds/autobuild/unified/filogic/25.12/defconfig
+\cp -r my_files/w-rules mtk-openwrt-feeds/autobuild/unified/filogic/rules
+\cp -r my_files/w-Makefile openwrt/package/libs/musl-fts/Makefile
 
 ### tx_power patch - required for BE14 boards with defective eeprom flash
 mkdir -p openwrt/package/kernel/mt76/patches && cp -r my_files/99999_tx_power_check.patch $_
@@ -52,7 +54,7 @@ chmod -R 755 feeds/luci/applications/luci-app-modemdata/root
 chmod -R 755 feeds/luci/applications/luci-app-sms-tool-js/root
 chmod -R 755 feeds/packages/utils/modemdata/files/usr/share
 
-\cp -r ../configs/config.telit .config
+\cp -r ../configs/config.02022026 .config
 
 #scripts/feeds uninstall crypto-eip pce tops-tool
 
