@@ -3,6 +3,9 @@ name: Build OpenWrt (BPI-R4, kernel 6.12)
 on:
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-22.04
@@ -69,6 +72,21 @@ jobs:
               }
             }
 
+      - name: Cleanup build output
+        if: success()
+        run: |
+          cd openwrt/bin/targets/mediatek/filogic
+
+          # smazat kernel debug a packages
+          rm -rf kernel-debug.tar.zst
+          rm -rf packages
+
+          # nechat jen mt7988-ram-ddr4-bl2.bin
+          for f in mt7988-ram-*.bin; do
+            [ "$f" = "mt7988-ram-ddr4-bl2.bin" ] || rm -f "$f"
+          done
+
+
       - name: Upload firmware artifacts
         if: success()
         uses: actions/upload-artifact@v4
@@ -76,7 +94,6 @@ jobs:
           name: openwrt-bpi-r4-6.12-images
           path: openwrt/bin/targets/mediatek/filogic/
 
-      # Vytvořit / aktualizovat release s aktuálním buildem
       - name: Create or update GitHub Release
         if: success()
         uses: softprops/action-gh-release@v2
@@ -86,9 +103,21 @@ jobs:
           draft: false
           prerelease: false
           files: |
-            openwrt/bin/targets/mediatek/filogic/*
+            openwrt/bin/targets/mediatek/filogic/config.buildinfo
+            openwrt/bin/targets/mediatek/filogic/feeds.buildinfo
+            openwrt/bin/targets/mediatek/filogic/mt7988-ram-ddr4-bl2.bin
+            openwrt/bin/targets/mediatek/filogic/openwrt-mediatek-filogic-bananapi_bpi-r4-emmc-bl31-uboot.fip
+            openwrt/bin/targets/mediatek/filogic/openwrt-mediatek-filogic-bananapi_bpi-r4-emmc-gpt.bin
+            openwrt/bin/targets/mediatek/filogic/openwrt-mediatek-filogic-bananapi_bpi-r4-emmc-preloader.bin
+            openwrt/bin/targets/mediatek/filogic/openwrt-mediatek-filogic-bananapi_bpi-r4-initramfs-kernel.bin
+            openwrt/bin/targets/mediatek/filogic/openwrt-mediatek-filogic-bananapi_bpi-r4-sdcard.img.gz
+            openwrt/bin/targets/mediatek/filogic/openwrt-mediatek-filogic-bananapi_bpi-r4-snand-bl31-uboot.fip
+            openwrt/bin/targets/mediatek/filogic/openwrt-mediatek-filogic-bananapi_bpi-r4-snand-preloader.bin
+            openwrt/bin/targets/mediatek/filogic/openwrt-mediatek-filogic-bananapi_bpi-r4-squashfs-sysupgrade.itb
+            openwrt/bin/targets/mediatek/filogic/sha256sums
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
 
       # Smazat všechny ostatní releasy a nechat jen poslední
       - name: Delete older releases keep latest
