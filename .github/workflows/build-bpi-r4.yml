@@ -51,7 +51,7 @@ jobs:
         run: |
           ls -R openwrt/bin/targets || true
 
-      # Smazat staré artefakty se stejným jménem
+      # Smazat starÃ© artefakty se stejnÃ½m jmÃ©nem
       - name: Delete old artifacts with same name
         if: success()
         uses: actions/github-script@v7
@@ -76,7 +76,7 @@ jobs:
           name: openwrt-bpi-r4-6.12-images
           path: openwrt/bin/targets/mediatek/filogic/
 
-      # Vytvoøit / aktualizovat release s aktuálním buildem
+      # VytvoÅ™it / aktualizovat release s aktuÃ¡lnÃ­m buildem
       - name: Create or update GitHub Release
         if: success()
         uses: softprops/action-gh-release@v2
@@ -90,7 +90,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # Smazat všechny ostatní releasy a nechat jen poslední
+      # Smazat vÅ¡echny ostatnÃ­ releasy a nechat jen poslednÃ­
       - name: Delete older releases keep latest
         if: success()
         uses: actions/github-script@v7
@@ -98,14 +98,14 @@ jobs:
           script: |
             const { owner, repo } = context.repo;
 
-            // seznam release, seøazený od nejnovìjšího
+            // seznam release, seÅ™azenÃ½ od nejnovÄ›jÅ¡Ã­ho
             const releases = await github.rest.repos.listReleases({
               owner,
               repo,
               per_page: 100
             });
 
-            // necháme první (nejnovìjší), zbytek smažeme
+            // nechÃ¡me prvnÃ­ (nejnovÄ›jÅ¡Ã­), zbytek smaÅ¾eme
             const toDelete = releases.data.slice(1);
 
             for (const rel of toDelete) {
