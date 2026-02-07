@@ -1,0 +1,121 @@
+name: Build OpenWrt (BPI-R4, kernel 6.12)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Free disk space on runner
+        run: |
+          sudo rm -rf \
+            "$AGENT_TOOLSDIRECTORY" \
+            /opt/ghc \
+            /opt/google/chrome \
+            /opt/microsoft/msedge \
+            /opt/microsoft/powershell \
+            /opt/pipx \
+            /usr/lib/mono \
+            /usr/local/julia* \
+            /usr/local/lib/android \
+            /usr/local/lib/node_modules \
+            /usr/local/share/chromium \
+            /usr/local/share/powershell \
+            /usr/share/dotnet \
+            /usr/share/swift
+          df -h
+
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            build-essential clang flex bison g++ gawk gcc-multilib g++-multilib \
+            gettext libncurses-dev libssl-dev python3-distutils python3-setuptools \
+            rsync swig unzip zlib1g-dev file wget libelf-dev ccache git
+
+      - name: Show disk space
+        run: df -h
+
+      - name: Run builder script
+        run: |
+          chmod +x ./bpi-r4-openwrt-builder.sh
+          ./bpi-r4-openwrt-builder.sh
+
+      - name: List built images
+        if: always()
+        run: |
+          ls -R openwrt/bin/targets || true
+
+      # Smazat staré artefakty se stejným jménem
+      - name: Delete old artifacts with same name
+        if: success()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const artifacts = await github.rest.actions.listArtifactsForRepo({ owner, repo, per_page: 100 });
+            for (const artifact of artifacts.data.artifacts) {
+              if (artifact.name === 'openwrt-bpi-r4-6.12-images') {
+                await github.rest.actions.deleteArtifact({
+                  owner,
+                  repo,
+                  artifact_id: artifact.id,
+                });
+              }
+            }
+
+      - name: Upload firmware artifacts
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: openwrt-bpi-r4-6.12-images
+          path: openwrt/bin/targets/mediatek/filogic/
+
+      # Vytvoøit / aktualizovat release s aktuálním buildem
+      - name: Create or update GitHub Release
+        if: success()
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: bpi-r4-latest
+          name: BPI-R4 latest build
+          draft: false
+          prerelease: false
+          files: |
+            openwrt/bin/targets/mediatek/filogic/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # Smazat všechny ostatní releasy a nechat jen poslední
+      - name: Delete older releases keep latest
+        if: success()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+
+            // seznam release, seøazený od nejnovìjšího
+            const releases = await github.rest.repos.listReleases({
+              owner,
+              repo,
+              per_page: 100
+            });
+
+            // necháme první (nejnovìjší), zbytek smažeme
+            const toDelete = releases.data.slice(1);
+
+            for (const rel of toDelete) {
+              await github.rest.repos.deleteRelease({
+                owner,
+                repo,
+                release_id: rel.id
+              }).catch(e => {
+                console.log(`Failed to delete release ${rel.id}: ${e.message}`);
+              });
+            }
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
