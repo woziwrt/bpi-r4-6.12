@@ -54,7 +54,6 @@ jobs:
         run: |
           ls -R openwrt/bin/targets || true
 
-      # Smazat staré artefakty se stejným jménem
       - name: Delete old artifacts with same name
         if: success()
         uses: actions/github-script@v7
@@ -77,11 +76,9 @@ jobs:
         run: |
           cd openwrt/bin/targets/mediatek/filogic
 
-          # smazat kernel debug a packages
           rm -rf kernel-debug.tar.zst
           rm -rf packages
 
-          # nechat jen mt7988-ram-ddr4-bl2.bin
           for f in mt7988-ram-*.bin; do
             [ "$f" = "mt7988-ram-ddr4-bl2.bin" ] || rm -f "$f"
           done
@@ -119,7 +116,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 
-      # Smazat všechny ostatní releasy a nechat jen poslední
       - name: Delete older releases keep latest
         if: success()
         uses: actions/github-script@v7
@@ -127,14 +123,12 @@ jobs:
           script: |
             const { owner, repo } = context.repo;
 
-            // seznam release, seřazený od nejnovějšího
             const releases = await github.rest.repos.listReleases({
               owner,
               repo,
               per_page: 100
             });
 
-            // necháme první (nejnovější), zbytek smažeme
             const toDelete = releases.data.slice(1);
 
             for (const rel of toDelete) {

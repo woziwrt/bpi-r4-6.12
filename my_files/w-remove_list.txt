@@ -1,5 +1,0 @@
-package/network/utils/iw/
-package/network/services/hostapd/
-package/kernel/mac80211/
-package/kernel/mt76/
-#package/network/config/wifi-scripts/
