@@ -137,3 +137,15 @@ After the script finishes, images are in:
 - This build is for Banana Pi BPI‑R4 only.
 - For simple custom builds, change only CONFIG_PACKAGE_… lines in my_final_defconfig.
 - OpenWrt and MTK SDK commits are pinned; updating them requires manual work.
+
+### Notes about GitHub runners and mirrors
+
+This workflow runs on GitHub-hosted runners, where the amount of free disk space is not guaranteed.
+Sometimes the runner only provides enough space for a minimal image, but not for a full release with many additional packages.
+
+If a build fails with “no space left on device” or similar disk-related errors, it usually means the assigned runner did not have enough free disk space.
+In that case, simply re-run the workflow later; when the runner happens to have around 100 GB of free space available, the full build including many packages is much more likely to succeed.
+
+In addition, the build system downloads sources and package feeds from external mirrors.
+If some of these mirrors are temporarily unavailable or slow, the workflow can also fail or take much longer to finish.
+Re-running the workflow later often resolves such transient mirror issues.
