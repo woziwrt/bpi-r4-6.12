@@ -14,9 +14,9 @@ cd mtk-openwrt-feeds; git checkout c50841e9d1dd88fa9a73cb2a2c9ffc86ec4b5bd9; cd 
 cd openwrt
 bash ../mtk-openwrt-feeds/autobuild/unified/autobuild.sh filogic-mac80211-mt798x_rfb-wifi7_nic prepare
 
-\cp -r ../my_files/w-Makefile openwrt/package/libs/musl-fts/Makefile
-\cp -r ../my_files/wsdd2-Makefile openwrt/feeds/packages/net/wsdd2/Makefile
-\cp -r ../my_files/9999-image-bpi-r4-sdcard.patch mtk-openwrt-feeds/25.12/patches-base
+\cp -r ../my_files/w-Makefile package/libs/musl-fts/Makefile
+\cp -r ../my_files/wsdd2-Makefile feeds/packages/net/wsdd2/Makefile
+\cp -r ../my_files/9999-image-bpi-r4-sdcard.patch ../mtk-openwrt-feeds/25.12/patches-base
 
 
 \cp -r ../my_files/sms-tool/ feeds/packages/utils/sms-tool
