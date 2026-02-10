@@ -1,0 +1,78 @@
+From 6323fdbbbf19e259ceb9627e866a31e428efbb97 Mon Sep 17 00:00:00 2001
+From: Gilly1970 <gilroyscott@hotmail.com>
+Date: Tue, 10 Feb 2026 23:33:39 +1000
+Subject: [PATCH] 0140-wifi-mt76-mt7996-use-mt76_get_txpower_kernel-6
+
+---
+ mt7996/eeprom.c | 41 ++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 40 insertions(+), 1 deletion(-)
+
+diff --git a/mt7996/eeprom.c b/mt7996/eeprom.c
+index e5fbfe7..1f085ef 100644
+--- a/mt7996/eeprom.c
++++ b/mt7996/eeprom.c
+@@ -171,6 +171,43 @@ mt7996_eeprom_parse_stream(const u8 *eeprom, u8 band_idx, u8 *path,
+ 	}
+ }
+ 
++static void
++mt7996_eeprom_fixup_tx_power(struct mt7996_dev *dev)
++{
++	u8 *eeprom = dev->mt76.eeprom.data;
++	int i;
++
++	/* 2.4GHz: Fix the EEPROM and Force the Live Variable */
++	if (eeprom[MT_EE_TX0_POWER_2G] <= 0x06 || eeprom[MT_EE_TX0_POWER_2G] == 0xff) {
++		for (i = 0; i < 4; i++) 
++			eeprom[MT_EE_TX0_POWER_2G + i] = 0x28; 
++		
++		/* Inject directly into the 6.12 current power variable */
++		if (dev->mt76.phys[MT_BAND0])
++			dev->mt76.phys[MT_BAND0]->txpower_cur = 20 * 2; 
++	}
++
++	/* 5GHz: Only fix if it's actually blank (Safety check) */
++	if (eeprom[MT_EE_TX0_POWER_5G] == 0x00 || eeprom[MT_EE_TX0_POWER_5G] == 0xff) {
++		for (i = 0; i < 8; i++)
++			eeprom[MT_EE_TX0_POWER_5G + i] = 0x28;
++		
++		if (dev->mt76.phys[MT_BAND1])
++			dev->mt76.phys[MT_BAND1]->txpower_cur = 20 * 2;
++	}
++
++	/* 6GHz: Fix the EEPROM and Force the Live Variable */
++	if (eeprom[MT_EE_TX0_POWER_6G] == 0x00 || eeprom[MT_EE_TX0_POWER_6G] == 0xff) {
++		for (i = 0; i < 8; i++)
++			eeprom[MT_EE_TX0_POWER_6G + i] = 0x2c;
++		
++		if (dev->mt76.phys[MT_BAND2])
++			dev->mt76.phys[MT_BAND2]->txpower_cur = 22 * 2;
++	}
++
++	dev_info(dev->mt76.dev, "EEPROM: Kernel 6.12 Direct Power Injection Applied\n");
++}
++
+ static bool mt7996_eeprom_variant_valid(struct mt7996_dev *dev, const u8 *def)
+ {
+ #define FEM_INT	0
+@@ -229,7 +266,7 @@ mt7996_eeprom_check_or_use_default(struct mt7996_dev *dev, bool use_default)
+ 	if (!use_default && mt7996_eeprom_variant_valid(dev, fw->data))
+ 		goto out;
+ 
+-	dev_warn(dev->mt76.dev, "eeprom load fail, use default bin\n");
++	//dev_warn(dev->mt76.dev, "eeprom load fail, use default bin\n");
+ 	memcpy(eeprom, fw->data, MT7996_EEPROM_SIZE);
+ 	dev->bin_file_mode = false;
+ 	dev->flash_mode = true;
+@@ -602,6 +639,8 @@ int mt7996_eeprom_init(struct mt7996_dev *dev)
+ 	ret = mt7996_eeprom_load(dev);
+ 	if (ret)
+ 		return ret;
++	
++	mt7996_eeprom_fixup_tx_power(dev);
+ 
+ 	mt7996_eeprom_load_precal(dev);
+ 
+-- 
+2.43.0
+
