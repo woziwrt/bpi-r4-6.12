@@ -24,6 +24,8 @@ Important files in the release:
 - ``openwrt-mediatek-filogic-bananapi_bpi-r4-squashfs-sysupgrade.itb`` – sysupgrade from an existing OpenWrt.
 - ``openwrt-mediatek-filogic-bananapi_bpi-r4-sdcard.img.gz`` – SD card image.
 - ``sha256sums`` – checksums for verification.
+  
+The release is always updated under the same tag  bpi-r4-latest , so the “Created” date on GitHub does not change. Check the list of files and the “Updated” time to see the latest build.
 
 You do not need to change anything in the repository for this use case.
 
