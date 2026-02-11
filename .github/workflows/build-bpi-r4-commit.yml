@@ -1,4 +1,4 @@
-name: Build OpenWrt (BPI-R4, kernel 6.12) - manual from ref
+name: Build OpenWrt (BPI-R4, 6.12, commit)
 
 on:
   workflow_dispatch:

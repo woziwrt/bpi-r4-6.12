@@ -1,4 +1,4 @@
-name: Build OpenWrt (BPI-R4, kernel 6.12) - latest
+name: Build OpenWrt (BPI-R4, 6.12, latest)
 
 on:
   workflow_dispatch:
