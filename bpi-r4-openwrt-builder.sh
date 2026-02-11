@@ -26,7 +26,6 @@ bash ../mtk-openwrt-feeds/autobuild/unified/autobuild.sh filogic-mac80211-mt798x
 \cp -r ../my_files/w-Makefile package/libs/musl-fts/Makefile
 \cp -r ../my_files/wsdd2-Makefile feeds/packages/net/wsdd2/Makefile
 
-\cp -r ../my_files/0140-wifi-mt76-mt7996-use-mt76_get_txpower_cur.patch
 
 \cp -r ../my_files/sms-tool/ feeds/packages/utils/sms-tool
 \cp -r ../my_files/modemdata-main/ feeds/packages/utils/modemdata 
