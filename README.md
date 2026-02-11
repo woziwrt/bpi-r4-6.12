@@ -6,13 +6,17 @@ Goal: you do not need a local build machine. You can trigger the build on GitHub
 
 ---
 
-## 1. Just want a ready-made image?
+## 1. Quick start - ready-made image (workflow "latest")
 
-If you only want a prebuilt firmware for BPI‑R4:
+If you only want a prebuilt firmware for BPI‑R4 and do not care about specific commit, use the "latest"workflow.
+
+It always builds from the current state of the repository (latest commit on the main branch).
+
+Steps:
 
 1. Open the “Actions” tab in this repository.
-2. Select the workflow “Build OpenWrt (BPI-R4, kernel 6.12)”.
-3. Click “Run workflow” and confirm.
+2. Select the workflow “Build OpenWrt (BPI-R4, kernel 6.12, latest)”.
+3. Click “Run workflow” and confirm. You do not need to change anything
 
 After the workflow finishes:
 
@@ -30,8 +34,34 @@ The release is always updated under the same tag  bpi-r4-latest , so the “Cr
 You do not need to change anything in the repository for this use case.
 
 ---
+## 2.	Build from a specific commit/branch (workflow “commit”)
 
-## 2. Add/remove a few packages (GitHub only)
+If you want to build firmware from a specific commit, branch or tag, use the “commit” workflow.
+This is useful if you want to reproduce an older build or test a feature branch.
+
+Steps:
+
+1.	Open the “Actions” tab in this repository.
+2.	Select the workflow “Build OpenWrt (BPI-R4, 6.12, commit)”.
+3.	Click “Run workflow”
+4.	
+In the dialog:
+
+1.	In the “Git reference” field enter what you want to build:
+ •	a commit SHA (for example 1234abcd…), or
+ •	a branch name (for example main, feature-x), or
+ •	a tag name (for example v1.0).
+
+2.	Confirm to start the workflow.
+  
+After the workflow finishes:
+
+1.	Open the “Releases” tab.
+2.	Download the latest release (tag bpi-r4-latest), same as in section 1. The release content reflects the commit/branch/tag you selected when starting the workflow.
+	
+Note: if you are not sure what to use, stick to the “latest” workflow from section 1.
+
+## 3. Add/remove a few packages (GitHub only)
 
 You can slightly customize the firmware by editing the final config file directly on GitHub.
 The build still runs on GitHub’s servers, not on your machine.
@@ -78,8 +108,11 @@ Step 2 – Edit the config on GitHub
 Step 3 – Trigger a new build
 
 1. Go to the “Actions” tab.
-2. Run the workflow “Build OpenWrt (BPI-R4, kernel 6.12)” again.
-3. After it finishes, download the latest release as in section 1.
+2. Run either workflow:
+   
+   •	“Build OpenWrt (BPI-R4, 6.12, latest)” – build from the latest commit.
+ 
+   •	“Build OpenWrt (BPI-R4, 6.12, commit)” – build from a specific commit/branch/tag.
 
 About dependencies
 
@@ -92,7 +125,7 @@ If you only toggle a few CONFIG_PACKAGE_… options, the build should stay consi
 
 ---
 
-## 3. Local build (optional, advanced)
+## 4. Local build (optional, advanced)
 
 If you prefer to build locally on Linux:
 
@@ -120,7 +153,7 @@ After the script finishes, images are in:
 
 ---
 
-## 4. Repository contents
+## 5. Repository contents
 
 - ``bpi-r4-openwrt-builder.sh`` – main build script (clone OpenWrt + MTK, prepare, build, apply config).
 - ``my_files/`` – custom config (my_final_defconfig), patches, custom packages and LuCI apps.
@@ -134,7 +167,7 @@ After the script finishes, images are in:
 
 ---
 
-## 5. Notes
+## 6. Notes
 
 - This build is for Banana Pi BPI‑R4 only.
 - For simple custom builds, change only CONFIG_PACKAGE_… lines in my_final_defconfig.
