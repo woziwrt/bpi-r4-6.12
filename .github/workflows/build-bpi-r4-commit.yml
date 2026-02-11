@@ -1,7 +1,12 @@
-name: Build OpenWrt (BPI-R4, kernel 6.12)
+name: Build OpenWrt (BPI-R4, kernel 6.12) - manual from ref
 
 on:
   workflow_dispatch:
+    inputs:
+      refToBuild:
+        description: 'Commit SHA / branch / tag pro build'
+        required: true
+        type: string
 
 permissions:
   contents: write
@@ -13,6 +18,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.refToBuild }}
 
       - name: Free disk space on runner
         run: |
@@ -54,7 +61,7 @@ jobs:
         run: |
           ls -R openwrt/bin/targets || true
 
-      - name: Delete old artifacts with same name
+      - name: Delete old artifacts with same name (manual)
         if: success()
         uses: actions/github-script@v7
         with:
@@ -62,7 +69,7 @@ jobs:
             const { owner, repo } = context.repo;
             const artifacts = await github.rest.actions.listArtifactsForRepo({ owner, repo, per_page: 100 });
             for (const artifact of artifacts.data.artifacts) {
-              if (artifact.name === 'openwrt-bpi-r4-6.12-images') {
+              if (artifact.name === 'openwrt-bpi-r4-6.12-images-manual') {
                 await github.rest.actions.deleteArtifact({
                   owner,
                   repo,
@@ -83,20 +90,21 @@ jobs:
             [ "$f" = "mt7988-ram-ddr4-bl2.bin" ] || rm -f "$f"
           done
 
-
-      - name: Upload firmware artifacts
+      - name: Upload firmware artifacts (manual)
         if: success()
         uses: actions/upload-artifact@v4
         with:
-          name: openwrt-bpi-r4-6.12-images
+          name: openwrt-bpi-r4-6.12-images-manual
           path: openwrt/bin/targets/mediatek/filogic/
 
-      - name: Create or update GitHub Release
+      - name: Create or update GitHub Release (manual)
         if: success()
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: bpi-r4-latest
-          name: BPI-R4 latest build
+          tag_name: bpi-r4-manual-latest
+          name: BPI-R4 manual build
+          body: |
+            Built from ref: ${{ inputs.refToBuild }}
           draft: false
           prerelease: false
           files: |
@@ -115,8 +123,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-
-      - name: Delete older releases keep latest
+      - name: Delete older manual releases keep latest
         if: success()
         uses: actions/github-script@v7
         with:
@@ -129,7 +136,11 @@ jobs:
               per_page: 100
             });
 
-            const toDelete = releases.data.slice(1);
+            const manualReleases = releases.data.filter(
+              rel => rel.tag_name === 'bpi-r4-manual-latest'
+            );
+
+            const toDelete = manualReleases.slice(1);
 
             for (const rel of toDelete) {
               await github.rest.repos.deleteRelease({
