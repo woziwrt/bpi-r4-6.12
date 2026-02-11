@@ -44,7 +44,7 @@ Steps:
 1.	Open the “Actions” tab in this repository.
 2.	Select the workflow “Build OpenWrt (BPI-R4, 6.12, commit)”.
 3.	Click “Run workflow”
-4.	
+	
 In the dialog:
 
 1.	In the “Git reference” field enter what you want to build:

@@ -137,7 +137,7 @@ jobs:
             });
 
             const manualReleases = releases.data.filter(
-              rel => rel.tag_name === 'bpi-r4-manual-latest'
+              rel => rel.tag_name === 'bpi-r4-manual-commit'
             );
 
             const toDelete = manualReleases.slice(1);
