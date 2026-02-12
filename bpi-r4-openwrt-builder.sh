@@ -8,7 +8,7 @@ git clone --branch openwrt-25.12 https://github.com/openwrt/openwrt.git openwrt
 cd openwrt; git checkout 85342bea07f65bdd9a22fc45a4c977c9aa42a5fb; cd -;		#wireguard-tools: fix script errors
 
 git clone --branch master https://git01.mediatek.com/openwrt/feeds/mtk-openwrt-feeds
-cd mtk-openwrt-feeds; git checkout f7b40c1e22aa0276494562155a19028bfd2bcc58; cd -;	#[openwrt-25][common][bsp][Update memory dump support]
+cd mtk-openwrt-feeds; git checkout e39de5680a2e945a6d420e9f9f95cef8d4f99506; cd -;	#[openwrt-24][MAC80211][WiFi7][Update MP4.2 critical patches]
 
 \cp -r my_files/w-defconfig mtk-openwrt-feeds/autobuild/unified/filogic/25.12/defconfig
 \cp -r my_files/1130-image-mediatek-filogic-add-bananapi-bpi-r4-pro-support.patch mtk-openwrt-feeds/25.12/patches-base
