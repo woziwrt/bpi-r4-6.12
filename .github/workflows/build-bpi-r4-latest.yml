@@ -83,6 +83,19 @@ jobs:
             [ "$f" = "mt7988-ram-ddr4-bl2.bin" ] || rm -f "$f"
           done
 
+      - name: Create ZIP with all images
+        if: success()
+        run: |
+          cd openwrt/bin/targets/mediatek/filogic
+          zip -r openwrt-bpi-r4-6.12-images.zip .
+
+      - name: Set short SHA and tag
+        id: vars
+        run: |
+          SHORT_SHA=$(git rev-parse --short HEAD)
+          echo "short_sha=${SHORT_SHA}" >> "$GITHUB_OUTPUT"
+          echo "tag_name=bpi-r4-commit-${SHORT_SHA}" >> "$GITHUB_OUTPUT"
+
       - name: Upload firmware artifacts (latest)
         if: success()
         uses: actions/upload-artifact@v4
@@ -101,6 +114,7 @@ jobs:
           draft: false
           prerelease: false
           files: |
+            openwrt/bin/targets/mediatek/filogic/openwrt-bpi-r4-6.12-images.zip
             openwrt/bin/targets/mediatek/filogic/config.buildinfo
             openwrt/bin/targets/mediatek/filogic/feeds.buildinfo
             openwrt/bin/targets/mediatek/filogic/mt7988-ram-ddr4-bl2.bin
@@ -116,7 +130,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Delete older releases from A keep latest
+      - name: Delete older releases (keep latest)
         if: success()
         uses: actions/github-script@v7
         with:
@@ -129,10 +143,15 @@ jobs:
               per_page: 100
             });
 
+            // všechny releasy s tagem bpi-r4-latest
             const autoReleases = releases.data.filter(
               rel => rel.tag_name === 'bpi-r4-latest'
             );
 
+            // seøadit (nejnovìjší první)
+            autoReleases.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+
+            // nechat nejnovìjší, ostatní smazat
             const toDelete = autoReleases.slice(1);
 
             for (const rel of toDelete) {

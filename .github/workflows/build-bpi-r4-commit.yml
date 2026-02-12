@@ -90,6 +90,12 @@ jobs:
             [ "$f" = "mt7988-ram-ddr4-bl2.bin" ] || rm -f "$f"
           done
 
+      - name: Create ZIP with all images
+        if: success()
+        run: |
+          cd openwrt/bin/targets/mediatek/filogic
+          zip -r openwrt-bpi-r4-6.12-images-manual.zip .
+
       - name: Set short SHA and tag
         id: vars
         run: |
@@ -116,6 +122,7 @@ jobs:
           draft: false
           prerelease: false
           files: |
+            openwrt/bin/targets/mediatek/filogic/openwrt-bpi-r4-6.12-images-manual.zip
             openwrt/bin/targets/mediatek/filogic/config.buildinfo
             openwrt/bin/targets/mediatek/filogic/feeds.buildinfo
             openwrt/bin/targets/mediatek/filogic/mt7988-ram-ddr4-bl2.bin
@@ -144,26 +151,31 @@ jobs:
               per_page: 100
             });
 
-            // Najdeme všechny releasy, jejichž tag_name začíná na "bpi-r4-commit-"
             const manualReleases = releases.data.filter(
               rel => rel.tag_name && rel.tag_name.startsWith('bpi-r4-commit-')
             );
 
-            // Seřadíme podle creation date (nejnovější první)
             manualReleases.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
 
-            // Necháme si jen první (nejnovější), zbytek smažeme
             const toDelete = manualReleases.slice(1);
 
             for (const rel of toDelete) {
               try {
-                await github.rest.repos.deleteRelease({
+                 await github.rest.repos.deleteRelease({
                   owner,
                   repo,
                   release_id: rel.id
                 });
+
+                if (rel.tag_name) {
+                  await github.rest.git.deleteRef({
+                    owner,
+                    repo,
+                    ref: `tags/${rel.tag_name}`,
+                  });
+                }
               } catch (e) {
-                console.log(`Failed to delete release ${rel.id}: ${e.message}`);
+                console.log(`Failed to delete release/tag ${rel.tag_name}: ${e.message}`);
               }
             }
         env:
