@@ -8,7 +8,7 @@ Use the latest workflow for normal builds, and the commit workflow only if you k
 
 ---
 
-## 1. Quick start - ready-made image (workflow "latest")
+## 1. Quick start - ready-made image  (workflow "latest")
 
 If you only want a prebuilt firmware for BPI‑R4 and do not care about specific commit, use the "latest"workflow.
 
@@ -186,3 +186,4 @@ In that case, simply re-run the workflow later; when the runner happens to have 
 In addition, the build system downloads sources and package feeds from external mirrors.
 If some of these mirrors are temporarily unavailable or slow, the workflow can also fail or take much longer to finish.
 Re-running the workflow later often resolves such transient mirror issues.
+# test gpg sign
