@@ -5,7 +5,7 @@ rm -rf openwrt
 rm -rf mtk-openwrt-feeds
 
 git clone --branch openwrt-25.12 https://github.com/openwrt/openwrt.git openwrt
-cd openwrt; git checkout 85342bea07f65bdd9a22fc45a4c977c9aa42a5fb; cd -;		#wireguard-tools: fix script errors
+cd openwrt; git checkout 74bf3689ea6326dcdd3386c46b70e4877ea3347e; cd -;		#kernel: backport pppoe improvements
 
 git clone --branch master https://git01.mediatek.com/openwrt/feeds/mtk-openwrt-feeds
 cd mtk-openwrt-feeds; git checkout e39de5680a2e945a6d420e9f9f95cef8d4f99506; cd -;	#[openwrt-24][MAC80211][WiFi7][Update MP4.2 critical patches]
