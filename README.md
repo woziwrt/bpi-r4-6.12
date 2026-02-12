@@ -20,7 +20,7 @@ Steps:
 2. Select the workflow “Build OpenWrt (BPI-R4, kernel 6.12, latest)”.
 3. Click “Run workflow” and confirm. You do not need to change anything
 
-After the workflow finishes:
+After the workflow finishes :
 
 1. Open the “Releases” tab.
 2. Download the latest release (tag bpi-r4-latest).
