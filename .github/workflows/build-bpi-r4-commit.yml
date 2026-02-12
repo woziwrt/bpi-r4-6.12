@@ -90,6 +90,13 @@ jobs:
             [ "$f" = "mt7988-ram-ddr4-bl2.bin" ] || rm -f "$f"
           done
 
+      - name: Set short SHA and tag
+        id: vars
+        run: |
+          SHORT_SHA=$(git rev-parse --short HEAD)
+          echo "short_sha=${SHORT_SHA}" >> "$GITHUB_OUTPUT"
+          echo "tag_name=bpi-r4-commit-${SHORT_SHA}" >> "$GITHUB_OUTPUT"
+
       - name: Upload firmware artifacts (manual)
         if: success()
         uses: actions/upload-artifact@v4
@@ -101,10 +108,11 @@ jobs:
         if: success()
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: bpi-r4-from-commit
-          name: BPI-R4 manual build (from commit)
+          tag_name: ${{ steps.vars.outputs.tag_name }}
+          name: BPI-R4 build (commit ${{ steps.vars.outputs.short_sha }})
           body: |
             Built from ref: ${{ inputs.refToBuild }}
+            Effective commit: ${{ steps.vars.outputs.short_sha }}
           draft: false
           prerelease: false
           files: |
@@ -123,7 +131,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Delete older manual releases keep latest
+      - name: Delete older manual releases with same tag prefix
         if: success()
         uses: actions/github-script@v7
         with:
@@ -136,20 +144,27 @@ jobs:
               per_page: 100
             });
 
+            // Najdeme všechny releasy, jejichž tag_name začíná na "bpi-r4-commit-"
             const manualReleases = releases.data.filter(
-              rel => rel.tag_name === 'bpi-r4-from-commit'
+              rel => rel.tag_name && rel.tag_name.startsWith('bpi-r4-commit-')
             );
 
+            // Seřadíme podle creation date (nejnovější první)
+            manualReleases.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+
+            // Necháme si jen první (nejnovější), zbytek smažeme
             const toDelete = manualReleases.slice(1);
 
             for (const rel of toDelete) {
-              await github.rest.repos.deleteRelease({
-                owner,
-                repo,
-                release_id: rel.id
-              }).catch(e => {
+              try {
+                await github.rest.repos.deleteRelease({
+                  owner,
+                  repo,
+                  release_id: rel.id
+                });
+              } catch (e) {
                 console.log(`Failed to delete release ${rel.id}: ${e.message}`);
-              });
+              }
             }
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
