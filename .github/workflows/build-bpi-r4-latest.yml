@@ -95,7 +95,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: bpi-r4-latest
-          name: BPI-R4 latest build
+          name: BPI-R4 manual build (latest)
           body: |
             Built from ref: ${GITHUB_SHA}
           draft: false

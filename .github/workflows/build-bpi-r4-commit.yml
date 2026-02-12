@@ -101,8 +101,8 @@ jobs:
         if: success()
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: bpi-r4-manual-latest
-          name: BPI-R4 manual build
+          tag_name: bpi-r4-from-commit
+          name: BPI-R4 manual build (from commit)
           body: |
             Built from ref: ${{ inputs.refToBuild }}
           draft: false
@@ -137,7 +137,7 @@ jobs:
             });
 
             const manualReleases = releases.data.filter(
-              rel => rel.tag_name === 'bpi-r4-manual-commit'
+              rel => rel.tag_name === 'bpi-r4-from-commit'
             );
 
             const toDelete = manualReleases.slice(1);

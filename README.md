@@ -4,6 +4,8 @@ This repository contains a script and a GitHub Actions workflow to build OpenWrt
 
 Goal: you do not need a local build machine. You can trigger the build on GitHub and download ready-to-use images. Advanced users can tweak the config if they want.
 
+Use the latest workflow for normal builds, and the commit workflow only if you know you need a specific commit/branch/tag.
+
 ---
 
 ## 1. Quick start - ready-made image (workflow "latest")
