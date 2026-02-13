@@ -6,6 +6,17 @@ Goal: you do not need a local build machine. You can trigger the build on GitHub
 
 Use the latest workflow for normal builds, and the commit workflow only if you know you need a specific commit/branch/tag.
 
+## Important note for forks
+
+If you create a **fork** of this repository, GitHub Actions will not run automatically.
+
+To make the build workflows work in your fork, you must:
+
+1. Go to the **Actions** tab in *your forked repository* and click the button to **enable workflows** for this repo.
+2. In your fork, open **Settings → Actions → General** and check:
+   - **Actions permissions**: allow GitHub Actions to run for this repository.
+   - **Workflow permissions**: set `GITHUB_TOKEN` to **Read and write permissions**, otherwise the workflows cannot create releases, tags, or upload artifacts.
+
 ---
 
 ## 1. Quick start - ready-made image  (workflow "latest")
@@ -186,4 +197,4 @@ In that case, simply re-run the workflow later; when the runner happens to have 
 In addition, the build system downloads sources and package feeds from external mirrors.
 If some of these mirrors are temporarily unavailable or slow, the workflow can also fail or take much longer to finish.
 Re-running the workflow later often resolves such transient mirror issues.
-# test gpg sign
+
