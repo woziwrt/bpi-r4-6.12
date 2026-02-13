@@ -151,22 +151,27 @@ jobs:
               per_page: 100
             });
 
+            // Najdeme všechny releasy, jejichž tag_name zaèíná na "bpi-r4-commit-"
             const manualReleases = releases.data.filter(
               rel => rel.tag_name && rel.tag_name.startsWith('bpi-r4-commit-')
             );
 
+            // Seøadíme podle creation date (nejnovìjší první)
             manualReleases.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
 
+            // Necháme si jen první (nejnovìjší), zbytek smažeme
             const toDelete = manualReleases.slice(1);
 
             for (const rel of toDelete) {
               try {
-                 await github.rest.repos.deleteRelease({
+                // smazat release
+                await github.rest.repos.deleteRelease({
                   owner,
                   repo,
                   release_id: rel.id
                 });
 
+                // smazat tag
                 if (rel.tag_name) {
                   await github.rest.git.deleteRef({
                     owner,
