@@ -17,9 +17,6 @@ cd mtk-openwrt-feeds; git checkout ff9029576c3c07cdeed9dda8de7f8e9d8f996dcd; cd 
 ### tx_power check Gilly_1970's patch - for defective BE14 boards with defective eeprom flash
 #\cp -r my_files/0140-wifi-mt76-mt7996-use-mt76_get_txpower_cur.patch mtk-openwrt-feeds/autobuild/unified/filogic/mac80211/25.12/files/package/kernel/mt76/patches
 
-\cp -r ../my_files/w-Makefile package/libs/musl-fts/Makefile
-\cp -r ../my_files/wsdd2-Makefile feeds/packages/net/wsdd2/Makefile
-
 cd openwrt
 bash ../mtk-openwrt-feeds/autobuild/unified/autobuild.sh filogic-mac80211-mt798x_rfb-wifi7_nic prepare
 
