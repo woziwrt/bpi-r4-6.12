@@ -5,14 +5,11 @@ rm -rf openwrt
 rm -rf mtk-openwrt-feeds
 
 git clone --branch openwrt-25.12 https://github.com/openwrt/openwrt.git openwrt
-cd openwrt; git checkout 324e157b4bf2fea54bd2608ab2af05066936e12f; cd -;		#apk: handle edge case when parsing .apk files
+cd openwrt; git checkout dbb6f0b547960ec489ca50ef24d99885b2595b16; cd -;		#mediatek: TP-Link EAP683-UR support
 
 git clone --branch master https://git01.mediatek.com/openwrt/feeds/mtk-openwrt-feeds
-cd mtk-openwrt-feeds; git checkout 0d7dc2bd18d95a0b71d77931612a6905da8a89de; cd -;	#[openwrt-25.12][common][common][Remove patch reverting OpenWrt commit 82fec21]
+cd mtk-openwrt-feeds; git checkout ff9029576c3c07cdeed9dda8de7f8e9d8f996dcd; cd -;	#[kernel-6.12][common][eth][Fix patch conflict issue]
 
-\cp -r my_files/w-defconfig mtk-openwrt-feeds/autobuild/unified/filogic/25.12/defconfig
-\cp -r my_files/1130-image-mediatek-filogic-add-bananapi-bpi-r4-pro-support.patch mtk-openwrt-feeds/25.12/patches-base
-\cp -r my_files/1133-image-mediatek-filogic-add-bananapi-bpi-r4-support.patch mtk-openwrt-feeds/25.12/patches-base
 \cp -r my_files/999-sfp-10-additional-quirks.patch mtk-openwrt-feeds/25.12/files/target/linux/mediatek/patches-6.12
 
 \cp -r my_files/9999-image-bpi-r4-sdcard.patch mtk-openwrt-feeds/25.12/patches-base
@@ -20,12 +17,11 @@ cd mtk-openwrt-feeds; git checkout 0d7dc2bd18d95a0b71d77931612a6905da8a89de; cd 
 ### tx_power check Gilly_1970's patch - for defective BE14 boards with defective eeprom flash
 #\cp -r my_files/0140-wifi-mt76-mt7996-use-mt76_get_txpower_cur.patch mtk-openwrt-feeds/autobuild/unified/filogic/mac80211/25.12/files/package/kernel/mt76/patches
 
-cd openwrt
-bash ../mtk-openwrt-feeds/autobuild/unified/autobuild.sh filogic-mac80211-mt798x_rfb-wifi7_nic prepare
-
 \cp -r ../my_files/w-Makefile package/libs/musl-fts/Makefile
 \cp -r ../my_files/wsdd2-Makefile feeds/packages/net/wsdd2/Makefile
 
+cd openwrt
+bash ../mtk-openwrt-feeds/autobuild/unified/autobuild.sh filogic-mac80211-mt798x_rfb-wifi7_nic prepare
 
 \cp -r ../my_files/sms-tool/ feeds/packages/utils/sms-tool
 \cp -r ../my_files/modemdata-main/ feeds/packages/utils/modemdata 
