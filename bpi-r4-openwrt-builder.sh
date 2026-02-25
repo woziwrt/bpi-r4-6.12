@@ -8,7 +8,7 @@ git clone --branch openwrt-25.12 https://github.com/openwrt/openwrt.git openwrt
 cd openwrt; git checkout dbb6f0b547960ec489ca50ef24d99885b2595b16; cd -;		#mediatek: TP-Link EAP683-UR support
 
 git clone --branch master https://git01.mediatek.com/openwrt/feeds/mtk-openwrt-feeds
-cd mtk-openwrt-feeds; git checkout ff9029576c3c07cdeed9dda8de7f8e9d8f996dcd; cd -;	#[kernel-6.12][common][eth][Fix patch conflict issue]
+cd mtk-openwrt-feeds; git checkout e85f8374bdffb1ebd0d1c0822c5c3992d1201f49; cd -;	#[25.12][common][optee][add rust build support for OP-TEE TA/host]
 
 \cp -r my_files/999-sfp-10-additional-quirks.patch mtk-openwrt-feeds/25.12/files/target/linux/mediatek/patches-6.12
 
