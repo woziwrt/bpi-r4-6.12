@@ -18,6 +18,7 @@ cd mtk-openwrt-feeds; git checkout e85f8374bdffb1ebd0d1c0822c5c3992d1201f49; cd 
 #\cp -r my_files/0140-wifi-mt76-mt7996-use-mt76_get_txpower_cur.patch mtk-openwrt-feeds/autobuild/unified/filogic/mac80211/25.12/files/package/kernel/mt76/patches
 
 cd openwrt
+rm -f ../mtk-openwrt-feeds/25.12/patches-feeds/cryptsetup-01-add-host-build.patch
 bash ../mtk-openwrt-feeds/autobuild/unified/autobuild.sh filogic-mac80211-mt798x_rfb-wifi7_nic prepare
 
 \cp -r ../my_files/sms-tool/ feeds/packages/utils/sms-tool
