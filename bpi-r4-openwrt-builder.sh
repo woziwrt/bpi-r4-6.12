@@ -5,10 +5,10 @@ rm -rf openwrt
 rm -rf mtk-openwrt-feeds
 
 git clone --branch openwrt-25.12 https://github.com/openwrt/openwrt.git openwrt
-cd openwrt; git checkout dbb6f0b547960ec489ca50ef24d99885b2595b16; cd -;		#mediatek: TP-Link EAP683-UR support
+cd openwrt; git checkout c2fe6ca16d0e6c9ec31da709d44263efdf12a3c1; cd -;		#OpenWrt v25.12.0: revert to branch defaults
 
 git clone --branch master https://git01.mediatek.com/openwrt/feeds/mtk-openwrt-feeds
-cd mtk-openwrt-feeds; git checkout e85f8374bdffb1ebd0d1c0822c5c3992d1201f49; cd -;	#[25.12][common][optee][add rust build support for OP-TEE TA/host]
+cd mtk-openwrt-feeds; git checkout d32a4a086d27340c5fa0cfbabe196c1cca06abbe; cd -;	#[kernel-5.4/kernel-6.12][common][hnat][Add HNAT manual API support]
 
 \cp -r my_files/999-sfp-10-additional-quirks.patch mtk-openwrt-feeds/25.12/files/target/linux/mediatek/patches-6.12
 
@@ -29,8 +29,8 @@ bash ../mtk-openwrt-feeds/autobuild/unified/autobuild.sh filogic-mac80211-mt798x
 ./scripts/feeds update -a
 ./scripts/feeds install -a
 
-#\cp -r ../my_files/qmi.sh package/network/utils/uqmi/files/lib/netifd/proto/
-#chmod -R 755 package/network/utils/uqmi/files/lib/netifd/proto
+\cp -r ../my_files/qmi.sh package/network/utils/uqmi/files/lib/netifd/proto/
+chmod -R 755 package/network/utils/uqmi/files/lib/netifd/proto
 chmod -R 755 feeds/luci/applications/luci-app-modemdata/root
 chmod -R 755 feeds/luci/applications/luci-app-sms-tool-js/root
 chmod -R 755 feeds/packages/utils/modemdata/files/usr/share
