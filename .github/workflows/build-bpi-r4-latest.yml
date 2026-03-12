@@ -104,14 +104,14 @@ jobs:
           name: openwrt-bpi-r4-6.12-images
           path: openwrt/bin/targets/mediatek/filogic/
 
-      - name: Create or update GitHub Release (latest)
+      - name: Create GitHub Release
         if: success()
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: bpi-r4-latest
-          name: BPI-R4 manual build (latest)
+          tag_name: ${{ steps.vars.outputs.tag_name }}
+          name: BPI-R4 manual build - ${{ steps.vars.outputs.short_sha }}
           body: |
-            Built from ref: ${GITHUB_SHA}
+            Built from commit: ${{ github.sha }}
           draft: false
           prerelease: false
           files: |
@@ -128,41 +128,5 @@ jobs:
             openwrt/bin/targets/mediatek/filogic/openwrt-mediatek-filogic-bananapi_bpi-r4-snand-preloader.bin
             openwrt/bin/targets/mediatek/filogic/openwrt-mediatek-filogic-bananapi_bpi-r4-squashfs-sysupgrade.itb
             openwrt/bin/targets/mediatek/filogic/sha256sums
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Delete older releases (keep latest)
-        if: success()
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const { owner, repo } = context.repo;
-
-            const releases = await github.rest.repos.listReleases({
-              owner,
-              repo,
-              per_page: 100
-            });
-
-            // v�echny releasy s tagem bpi-r4-latest
-            const autoReleases = releases.data.filter(
-              rel => rel.tag_name === 'bpi-r4-latest'
-            );
-
-            // se�adit (nejnov�j�� prvn�)
-            autoReleases.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-
-            // nechat nejnov�j��, ostatn� smazat
-            const toDelete = autoReleases.slice(1);
-
-            for (const rel of toDelete) {
-              await github.rest.repos.deleteRelease({
-                owner,
-                repo,
-                release_id: rel.id
-              }).catch(e => {
-                console.log(`Failed to delete release ${rel.id}: ${e.message}`);
-              });
-            }
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
