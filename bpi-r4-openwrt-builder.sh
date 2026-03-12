@@ -5,10 +5,10 @@ rm -rf openwrt
 rm -rf mtk-openwrt-feeds
 
 git clone --branch openwrt-25.12 https://github.com/openwrt/openwrt.git openwrt
-cd openwrt; git checkout c2fe6ca16d0e6c9ec31da709d44263efdf12a3c1; cd -;		#OpenWrt v25.12.0: revert to branch defaults
+cd openwrt; git checkout 34ae6ba2d861e710e3c130c95cdb7eb4a1286121; cd -;		#procd: update to Git HEAD (2026-03-11)
 
 git clone --branch master https://git01.mediatek.com/openwrt/feeds/mtk-openwrt-feeds
-cd mtk-openwrt-feeds; git checkout b0fefe65a28d5a5b938c9c197d6bbe729484ffef; cd -;	#[kernel-5.4/6.12][mt7988][eth][linux-firmware: mediatek: Revert firmware wrongly updated]
+cd mtk-openwrt-feeds; git checkout 6ce60af4713fffc97222136bc94a5fcf858ef409; cd -;	#[openwrt-25][common][bsp][Use git-src instead of git-src-full to reduce feed size]
 
 \cp -r my_files/999-sfp-10-additional-quirks.patch mtk-openwrt-feeds/25.12/files/target/linux/mediatek/patches-6.12
 
