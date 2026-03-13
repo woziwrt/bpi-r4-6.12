@@ -10,6 +10,8 @@ cd openwrt; git checkout 34ae6ba2d861e710e3c130c95cdb7eb4a1286121; cd -;		#procd
 git clone --branch master https://git01.mediatek.com/openwrt/feeds/mtk-openwrt-feeds
 cd mtk-openwrt-feeds; git checkout 6ce60af4713fffc97222136bc94a5fcf858ef409; cd -;	#[openwrt-25][common][bsp][Use git-src instead of git-src-full to reduce feed size]
 
+\cp -r my_files/feed_revision mtk-openwrt-feeds/autobuild/unified/
+
 \cp -r my_files/999-sfp-10-additional-quirks.patch mtk-openwrt-feeds/25.12/files/target/linux/mediatek/patches-6.12
 
 \cp -r my_files/9999-image-bpi-r4-sdcard.patch mtk-openwrt-feeds/25.12/patches-base
@@ -35,8 +37,8 @@ chmod -R 755 feeds/luci/applications/luci-app-modemdata/root
 chmod -R 755 feeds/luci/applications/luci-app-sms-tool-js/root
 chmod -R 755 feeds/packages/utils/modemdata/files/usr/share
 
-\cp -r ../my_files/my_final_defconfig .config
-#\cp -r ../configs/config.hnat.la .config
+#\cp -r ../my_files/my_final_defconfig .config
+\cp -r ../configs/config.hnat.la .config
 make defconfig
 
 bash ../mtk-openwrt-feeds/autobuild/unified/autobuild.sh filogic-mac80211-mt798x_rfb-wifi7_nic build
