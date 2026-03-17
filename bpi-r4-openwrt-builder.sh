@@ -5,11 +5,10 @@ rm -rf openwrt
 rm -rf mtk-openwrt-feeds
 
 git clone --branch openwrt-25.12 https://github.com/openwrt/openwrt.git openwrt
-cd openwrt; git checkout 805c8efad97d58b412af5823773fe4f6b8dbe435; cd -;		#mac80211: backport eMLSR/eMLMR parsing support
+cd openwrt; git checkout b21cfa8f8ccd8ccb89c9a735b9566fff29dc61a7; cd -;		#odhcpd: update to 25.12 Git HEAD (2026-03-16)
 
 git clone --branch master https://git01.mediatek.com/openwrt/feeds/mtk-openwrt-feeds
-cd mtk-openwrt-feeds; git checkout ca92ce2031be83573bbdef5e044d5fdec3d7c0ed; cd -;	#[openwrt-25][common][bsp][Unified Autobuild: enable local shared dl repo for internal build]
-
+cd mtk-openwrt-feeds; git checkout ad6d92efcde329c950f12545b183622f34c1c85f; cd -;	#[openwrt][mt798x][config][Disable unused trusted firmware packages]
 
 \cp -r my_files/feed_revision mtk-openwrt-feeds/autobuild/unified/
 
