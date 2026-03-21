@@ -1,6 +1,6 @@
 --- a/target/linux/mediatek/image/filogic.mk
 +++ b/target/linux/mediatek/image/filogic.mk
-@@ -673,11 +673,34 @@
+@@ -673,11 +673,33 @@
    DEVICE_COMPAT_VERSION := 1.1
    DEVICE_COMPAT_MESSAGE := The non-switch ports were renamed to match the board/case labels
    KERNEL_LOADADDR := 0x46000000
@@ -32,7 +32,6 @@
  	fit lzma $$(KDIR)/image-$$(firstword $$(DEVICE_DTS)).dtb with-initrd | pad-to 64k
    IMAGES := sysupgrade.itb
 -  KERNEL_INITRAMFS_SUFFIX := -recovery.itb
-+
    KERNEL_IN_UBI := 1
    IMAGES := sysupgrade.itb
    IMAGE/sysupgrade.itb := append-kernel | fit gzip $$(KDIR)/image-$$(firstword $$(DEVICE_DTS)).dtb external-with-rootfs | pad-rootfs | append-metadata

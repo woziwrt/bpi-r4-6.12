@@ -8,7 +8,7 @@ git clone --branch openwrt-25.12 https://github.com/openwrt/openwrt.git openwrt
 cd openwrt; git checkout b21cfa8f8ccd8ccb89c9a735b9566fff29dc61a7; cd -;		#odhcpd: update to 25.12 Git HEAD (2026-03-16)
 
 git clone --branch master https://git01.mediatek.com/openwrt/feeds/mtk-openwrt-feeds
-cd mtk-openwrt-feeds; git checkout ad6d92efcde329c950f12545b183622f34c1c85f; cd -;	#[openwrt][mt798x][config][Disable unused trusted firmware packages]
+cd mtk-openwrt-feeds; git checkout 24595844f63aebb6ccb9bcd28d9690dbfc541a46; cd -;	#[MAC80211][kernel-6.12][wed][Refactor wed msdu page ring init for next generation wifi chip compatible]
 
 \cp -r my_files/feed_revision mtk-openwrt-feeds/autobuild/unified/
 
