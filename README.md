@@ -1,5 +1,9 @@
 # OpenWrt build for Banana Pi BPI-R4 (kernel 6.12)
 
+> **Newer work lives in [woziwrt/bpi-r4-deploy](https://github.com/woziwrt/bpi-r4-deploy).**
+> That repository covers both the BPI-R4 and the **BPI-R4 Pro 8X**, tracks current OpenWrt and
+> MediaTek pins, and publishes ready-to-flash images as releases. This one is kept for reference.
+
 This repository contains a script and a GitHub Actions workflow to build OpenWrt 25.12 for Banana Pi BPI‑R4 (MT7988, Wi‑Fi 7) using the MediaTek SDK.
 
 Goal: you do not need a local build machine. You can trigger the build on GitHub and download ready-to-use images. Advanced users can tweak the config if they want.
